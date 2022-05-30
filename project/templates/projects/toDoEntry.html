@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% block contents %}
+<div class="bg-info text-center">
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="">Hello</label>
+        {{ form.as_p }}
+    </form>
+</div>
+{% endblock contents %}
