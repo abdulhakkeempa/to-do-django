@@ -6,13 +6,20 @@ from .models import toDoList
 
 # Create your views here.
 def homePage(request):
-    template = 'projects/index.html'
+    template = 'project/index.html'
     return render(request,template)
 
 def addProject(request):
     form = ProjectForm()
     context = {}
-    template = 'projects/toDoEntry.html'
+    template = 'project/toDoEntry.html'
     context['toDoList'] = form
     print("Routed",context)
     return render(request,template,context)
+
+def displayTask(request):
+    tasks = toDoList.objects.all()
+    template = 'project/view.html'
+    context = {}
+    context['tasks']=tasks
+    return render(request,template,context)    
