@@ -55,4 +55,8 @@ def updateTask(request,pk):
             return redirect('viewtasks')
     return render(request,template,context)
 
+def updateStatus(request,pk):
+    objects = toDoList.objects.get(id=pk)
+    print(objects)
+    return HttpResponse("It is Working")
        

@@ -10,9 +10,17 @@
 
 
 <script type="text/javascript">
+
+    function display5(value){
+        var url = "{% url updatestatus 'value' %}"
+        document.location.href = url
+    }
+
     $(document).ready(function(){
         $("#staticBackdrop").modal('show');
     });
+
+    
 </script>
 
 
@@ -32,7 +40,7 @@
     <tbody>
         {% for task in tasks %}
             <tr>
-                <th><input type="radio" name="" id="completeStatus" value="Completed"></th>
+                <th><input type="radio" class="completeStatus" value="{{ task.id }}" data-url="{% url 'updatestatus' task.id %}" onclick="display5(this.value)"></th>
                 <th>{{ task.id }}</th>
                 <th>{{ task.task }}</th>
                 <th>{{ task.remarks }}</th>
