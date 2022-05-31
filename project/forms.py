@@ -6,3 +6,4 @@ class ProjectForm(ModelForm):
     class Meta:
         model = toDoList
         fields = '__all__'
+        exclude = ['status']

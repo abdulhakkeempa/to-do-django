@@ -1,18 +1,37 @@
 {% extends 'main.html' %}
 {% block content %}
-<h1>Hello</h1>
+
+<style>
+    table,th{
+        outline: 1px solid black;
+        padding: 5px;
+    }
+</style>
+
+
+<h1>View Tasks</h1>
 <table>
     <thead>
         <tr>
+            <th></th>
+            <th>Id</th>
             <th>Task</th>
             <th>Remarks</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {% for task in tasks %}
             <tr>
+                <th><input type="radio" name="" id=""></th>
+                <th>{{ task.id }}</th>
                 <th>{{ task.task }}</th>
                 <th>{{ task.remarks }}</th>
+                <th class="text-danger">{{ task.status }}</th>
+                <th><a href="{% url 'deletetasks' task.id %}"><i class="bi bi-trash3-fill text-danger"></i></a></th>
+                <th><a href=""><i class="bi bi-pencil-square text-success"></i></a></th>
             </tr>
         {% endfor %}
     </tbody>

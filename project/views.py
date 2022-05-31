@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
 from project.forms import ProjectForm
@@ -10,11 +10,16 @@ def homePage(request):
     return render(request,template)
 
 def addProject(request):
-    form = ProjectForm()
+    tasks = ProjectForm()
     context = {}
     template = 'project/toDoEntry.html'
-    context['toDoList'] = form
-    print("Routed",context)
+    context['tasks'] = tasks
+
+    if request.method == 'POST':
+        tasks = ProjectForm(request.POST)
+        if tasks.is_valid():
+            tasks.save()
+            return redirect('viewtasks')
     return render(request,template,context)
 
 def displayTask(request):
@@ -22,4 +27,13 @@ def displayTask(request):
     template = 'project/view.html'
     context = {}
     context['tasks']=tasks
-    return render(request,template,context)    
+    return render(request,template,context) 
+
+def deleteTask(request,pk):
+       tasks = toDoList.objects.get(id=pk)
+       template = 'project/view.html'
+       context = {}
+       context['tasks'] = tasks 
+       tasks.delete()
+       return redirect('viewtasks')
+       
