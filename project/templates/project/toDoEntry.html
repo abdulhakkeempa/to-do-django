@@ -1,8 +1,10 @@
 {% extends 'main.html' %}
-{% block contents %}
+{% block content %}
+
+<h1>Add Task</h1>
 <form action="" method="">
     {% csrf_token %}
     {{ form.as_p }}
 </form>
 
-{% endblock contents %}
+{% endblock content %}

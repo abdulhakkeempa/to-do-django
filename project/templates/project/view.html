@@ -1,13 +1,22 @@
 {% extends 'main.html' %}
-{% block contents %}
+{% block content %}
+<h1>Hello</h1>
 <table>
     <thead>
-        <td>Task</td>
+        <tr>
+            <th>Task</th>
+            <th>Remarks</th>
+        </tr>
     </thead>
     <tbody>
-        
+        {% for task in tasks %}
+            <tr>
+                <th>{{ task.task }}</th>
+                <th>{{ task.remarks }}</th>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 
 
-{% endblock contents %}
+{% endblock content %}
