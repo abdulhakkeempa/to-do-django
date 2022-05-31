@@ -3,10 +3,17 @@
 
 <style>
     table,th{
-        outline: 1px solid black;
+        outline: 1px solid rgb(255, 255, 255);
         padding: 5px;
     }
 </style>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#staticBackdrop").modal('show');
+    });
+</script>
 
 
 <h1>View Tasks</h1>
@@ -25,17 +32,39 @@
     <tbody>
         {% for task in tasks %}
             <tr>
-                <th><input type="radio" name="" id=""></th>
+                <th><input type="radio" name="" id="completeStatus" value="Completed"></th>
                 <th>{{ task.id }}</th>
                 <th>{{ task.task }}</th>
                 <th>{{ task.remarks }}</th>
                 <th class="text-danger">{{ task.status }}</th>
                 <th><a href="{% url 'deletetasks' task.id %}"><i class="bi bi-trash3-fill text-danger"></i></a></th>
-                <th><a href=""><i class="bi bi-pencil-square text-success"></i></a></th>
+                <th><a href="{% url 'updatetasks' task.id %}"><i class="bi bi-pencil-square text-success"></i></a></th>
             </tr>
         {% endfor %}
     </tbody>
 </table>
 
+{% if delete %}
+        <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header ">
+                <h5 class="modal-title text-center" id="staticBackdropLabel">Confirm Delete</h5>
+            </div>
+            <div class="modal-body text-center">
+            Are you sure you want to remove the task ?
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a href="{% url 'viewtasks' %} " class="btn btn-info text-white">Close</a>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endif %}
 
 {% endblock content %}

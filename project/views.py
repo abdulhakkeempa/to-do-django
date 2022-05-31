@@ -1,3 +1,4 @@
+from asyncio import tasks
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
@@ -30,10 +31,28 @@ def displayTask(request):
     return render(request,template,context) 
 
 def deleteTask(request,pk):
-       tasks = toDoList.objects.get(id=pk)
+       tasks = toDoList.objects.all()
        template = 'project/view.html'
        context = {}
        context['tasks'] = tasks 
-       tasks.delete()
-       return redirect('viewtasks')
+       context['delete'] = True
+       if request.method == 'POST':
+           tasks = toDoList.objects.get(id=pk)
+           tasks.delete()
+           return redirect('viewtasks')
+       return render(request,template,context)
+
+def updateTask(request,pk):
+    objects = toDoList.objects.get(id=pk)
+    tasks = ProjectForm(instance=objects)
+    context = {}
+    context ['tasks'] = tasks
+    template = 'project/toDoEntry.html'
+    if request.method == 'POST':
+        tasks = ProjectForm(request.POST,instance=objects)
+        if tasks.is_valid:
+            tasks.save()
+            return redirect('viewtasks')
+    return render(request,template,context)
+
        
