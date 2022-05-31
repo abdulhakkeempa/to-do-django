@@ -12,8 +12,8 @@
 <script type="text/javascript">
 
     function display5(value){
-        var url = "{% url updatestatus 'value' %}"
-        document.location.href = url
+        var url = '{% url "updatestatus" %}'
+        document.location.href = url+'/'+value
     }
 
     $(document).ready(function(){
