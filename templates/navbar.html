@@ -1,3 +1,11 @@
 <!-- <header class="text-center bg-dark text-white"> -->
-    <h1>TO-DO-APP WITH PYTHON DJANGO</h1>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    <h1 class="mt-4">TO-DO-APP WITH PYTHON DJANGO</h1>
+    <div class="bg-dark mb-4">
+        <a href="{% url 'addtasks' %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add New Task"><i class="bi bi-plus-circle"></i>  Add Task</a>
+        <a href="{% url 'viewtasks' %}" class="btn btn-success"><i class="bi bi-dash-circle"></i>  View Task</a>
+    </div>
 <!-- </header> -->

@@ -8,7 +8,7 @@
     }
     .button-unclicked{
 	width:35px;
-    height:35px;
+    height: 35px;
     color: rgb(0, 0, 0) !important;
     border:3px solid white !important;
     background-color: black !important;
@@ -22,16 +22,16 @@
     }
 </style>
 
-
 <script type="text/javascript">
 
     $(document).ready(function(){
         $("#staticBackdrop").modal('show');
     });
+
 </script>
 
 
-<h1>View Tasks</h1>
+<h3 class="mb-4" >View Tasks</h3>
 <table>
     <thead>
         <tr>
@@ -51,16 +51,16 @@
                 {% else %}
                 <th><a href="{% url 'updatestatus' task.id %}"><button class="button-clicked p-0"><i class="text-center bi bi-check h3"></i></button></a></th>
                 {% endif %}
-                
-                <th>{{ task.task }}</th>
-                <th>{{ task.remarks }}</th>
+
+                <th class="h5">{{ task.task }}</th>
+                <th class="h5">{{ task.remarks }}</th>
                 {% if task.status == "Incomplete" %}
-                    <th class="text-danger">{{ task.status }}</th>
+                    <th class="text-danger h5">{{ task.status }}</th>
                 {% else %}
-                    <th class="text-success">{{ task.status }}</th>
+                    <th class="text-success h5">{{ task.status }}</th>
                 {% endif %}
-                <th><a href="{% url 'deletetasks' task.id %}"><i class="bi bi-trash3-fill text-danger"></i></a></th>
-                <th><a href="{% url 'updatetasks' task.id %}"><i class="bi bi-pencil-square text-success"></i></a></th>
+                <th><a href="{% url 'deletetasks' task.id %}"><i class="bi bi-trash3-fill text-danger h5"></i></a></th>
+                <th><a href="{% url 'updatetasks' task.id %}"><i class="bi bi-pencil-square text-success h5"></i></a></th>
             </tr>
         {% endfor %}
     </tbody>
@@ -78,11 +78,12 @@
             Are you sure you want to remove the task ?
             </div>
             <div class="modal-footer justify-content-center">
-                <a href="{% url 'viewtasks' %} " class="btn btn-info text-white">Close</a>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <input type="submit" value="Yes" class="btn btn-primary">
                 </form>
+                <a href="{% url 'viewtasks' %} " class="btn btn-secondary text-white">No</a>
+
             </div>
         </div>
         </div>
