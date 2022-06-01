@@ -52,8 +52,14 @@
                 <th><a href="{% url 'updatestatus' task.id %}"><button class="button-clicked p-0"><i class="text-center bi bi-check h3"></i></button></a></th>
                 {% endif %}
 
+                
+                {% if task.status == "Incomplete" %}
                 <th class="h5">{{ task.task }}</th>
                 <th class="h5">{{ task.remarks }}</th>
+                {% else %}
+                <th class="h5 text-decoration-line-through">{{ task.task }}</th>
+                <th class="h5 text-decoration-line-through">{{ task.remarks }}</th>
+                {% endif %}
                 {% if task.status == "Incomplete" %}
                     <th class="text-danger h5">{{ task.status }}</th>
                 {% else %}

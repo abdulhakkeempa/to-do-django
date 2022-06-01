@@ -5,6 +5,7 @@
     </script>
     <h1 class="mt-4">TO-DO-APP WITH PYTHON DJANGO</h1>
     <div class="bg-dark mb-4">
+        <a href="{% url 'homePage' %}" class="btn btn-secondary"><i class="bi bi-house-door"></i>  Home Page</a>
         <a href="{% url 'addtasks' %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add New Task"><i class="bi bi-plus-circle"></i>  Add Task</a>
         <a href="{% url 'viewtasks' %}" class="btn btn-success"><i class="bi bi-dash-circle"></i>  View Task</a>
     </div>
