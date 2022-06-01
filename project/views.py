@@ -1,6 +1,7 @@
 from asyncio import tasks
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from matplotlib.style import context
 
 from project.forms import ProjectForm
 from .models import toDoList
@@ -57,6 +58,11 @@ def updateTask(request,pk):
 
 def updateStatus(request,pk):
     objects = toDoList.objects.get(id=pk)
-    print(objects)
-    return HttpResponse("It is Working")
+    if objects.status == "Incomplete":
+        objects.status = "Completed"
+    else:
+        objects.status = "Incomplete"
+
+    objects.save()
+    return redirect('viewtasks')
        

@@ -2,25 +2,32 @@
 {% block content %}
 
 <style>
-    table,th{
+    table,th,td{
         outline: 1px solid rgb(255, 255, 255);
-        padding: 5px;
+        padding: 10px !important;
+    }
+    .button-unclicked{
+	width:35px;
+    height:35px;
+    color: rgb(0, 0, 0) !important;
+    border:3px solid white !important;
+    background-color: black !important;
+    }
+    .button-clicked{
+    width:35px;
+    height:35px;
+    border:3px solid white !important;
+    color: rgb(255, 255, 255) !important;
+    background-color: black !important;
     }
 </style>
 
 
 <script type="text/javascript">
 
-    function display5(value){
-        var url = '{% url "updatestatus" %}'
-        document.location.href = url+'/'+value
-    }
-
     $(document).ready(function(){
         $("#staticBackdrop").modal('show');
     });
-
-    
 </script>
 
 
@@ -29,7 +36,6 @@
     <thead>
         <tr>
             <th></th>
-            <th>Id</th>
             <th>Task</th>
             <th>Remarks</th>
             <th>Status</th>
@@ -40,11 +46,19 @@
     <tbody>
         {% for task in tasks %}
             <tr>
-                <th><input type="radio" class="completeStatus" value="{{ task.id }}" data-url="{% url 'updatestatus' task.id %}" onclick="display5(this.value)"></th>
-                <th>{{ task.id }}</th>
+                {% if task.status == "Incomplete" %}
+                <th><a href="{% url 'updatestatus' task.id %}"><button class="button-unclicked p-0"><i class="text-center bi bi-check h3"></i></button></a></th>
+                {% else %}
+                <th><a href="{% url 'updatestatus' task.id %}"><button class="button-clicked p-0"><i class="text-center bi bi-check h3"></i></button></a></th>
+                {% endif %}
+                
                 <th>{{ task.task }}</th>
                 <th>{{ task.remarks }}</th>
-                <th class="text-danger">{{ task.status }}</th>
+                {% if task.status == "Incomplete" %}
+                    <th class="text-danger">{{ task.status }}</th>
+                {% else %}
+                    <th class="text-success">{{ task.status }}</th>
+                {% endif %}
                 <th><a href="{% url 'deletetasks' task.id %}"><i class="bi bi-trash3-fill text-danger"></i></a></th>
                 <th><a href="{% url 'updatetasks' task.id %}"><i class="bi bi-pencil-square text-success"></i></a></th>
             </tr>
