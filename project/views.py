@@ -1,7 +1,5 @@
-from asyncio import tasks
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from matplotlib.style import context
 
 from project.forms import ProjectForm
 from .models import toDoList
