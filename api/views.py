@@ -18,9 +18,15 @@ from django.contrib.auth import authenticate
 
 # Create your views here.
 
-class ToDoViewSet(viewsets.ModelViewSet):
+class ToDoViewSet(generics.GenericAPIView):
   queryset = toDoList.objects.all()
   serializer_class = ToDoModelSerializer
+  permission_classes = [IsAuthenticated]
+
+  def get(self, request, *args, **kwargs):
+    queryset = toDoList.objects.filter(user=self.request.user)
+    data = self.get_serializer(queryset,many=True)
+    return Response(data.data)
 
 class UsersViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
