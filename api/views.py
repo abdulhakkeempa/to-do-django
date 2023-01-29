@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets,generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
+from django.db.models import Count
 
 
 from .serializer import ToDoModelSerializer,UserModelSerializer
@@ -24,9 +25,13 @@ class ToDoViewSet(generics.GenericAPIView):
   permission_classes = [IsAuthenticated]
 
   def get(self, request, *args, **kwargs):
+    """
+    API End Point to fetch the tasks created by the requested user.
+    """
     queryset = toDoList.objects.filter(user=self.request.user)
     data = self.get_serializer(queryset,many=True)
     return Response(data.data)
+
 
 class UsersViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
