@@ -11,4 +11,12 @@ class ToDoModelSerializer(serializers.ModelSerializer):
 class UserModelSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    exclude = ['password']
+    fields = ('id','username', 'email', 'password')
+    extra_kwargs = {'password': {'write_only': True}}
+
+  def create(self, validated_data):
+    """To create a new auth.user model"""
+    user = User.objects.create_user(**validated_data)
+    return user
+
+
