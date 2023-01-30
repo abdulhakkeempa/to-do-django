@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets,generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.permissions import AllowAny
 from django.db.models import Count
 
@@ -32,11 +32,26 @@ class ToDoViewSet(generics.GenericAPIView):
     data = self.get_serializer(queryset,many=True)
     return Response(data.data)
 
+  def post(self, request, *args, **kwargs):
+    """
+    API End Point to create a task for a requested user.
+    """
+    serializer = self.get_serializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    task = serializer.save()
+    return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+  def get_object(self, pk):
+    try:
+        return toDoList.objects.get(pk=pk)
+    except toDoList.DoesNotExist:
+        raise status.HTTP_201_CREATED
+
 
 class UsersViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserModelSerializer
-  permission_classes = [IsAuthenticated]
+  permission_classes = [IsAdminUser]
 
 
 class UserCreateAPI(generics.GenericAPIView):
