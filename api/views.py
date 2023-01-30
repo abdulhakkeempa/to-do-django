@@ -43,9 +43,11 @@ class ToDoViewSet(generics.GenericAPIView):
 
   def get_object(self, pk):
     try:
-        return toDoList.objects.get(pk=pk)
+        data = toDoList.objects.get(pk=pk)
+        data = self.get_serializer(data)
+        return Response(data.data)
     except toDoList.DoesNotExist:
-        raise status.HTTP_201_CREATED
+        raise Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class UsersViewSet(viewsets.ModelViewSet):
