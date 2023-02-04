@@ -17,5 +17,5 @@ urlpatterns = [
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/',UserCreateAPI.as_view()),
     path('tasks/',ToDoViewSet.as_view()),
-    path('tasks/<str:pk>',ToDoViewSet.get_object)
+    path('tasks/<str:pk>',ToDoViewSet.as_view())
 ]
