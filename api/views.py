@@ -26,10 +26,15 @@ class ToDoViewSet(views.APIView):
   permission_classes = [IsAuthenticated]
   lookup_field = 'id'
 
-  def get(self, request, *args, **kwargs):
+  def get(self, request,pk=None, *args, **kwargs):
     """
     API End Point to fetch the tasks created by the requested user.
     """
+    if pk:
+      task = self.get_object(pk)
+      serializer = ToDoModelSerializer(task)
+      return JsonResponse(serializer.data,status=status.HTTP_200_OK)
+
     queryset = toDoList.objects.filter(user=self.request.user)
     data = ToDoModelSerializer(queryset,many=True)
     return Response(data.data)
@@ -49,24 +54,24 @@ class ToDoViewSet(views.APIView):
     """
     try:
       task = toDoList.objects.get(id=pk)
-      serializer = ToDoModelSerializer(task)
-    except toDoList.DoesNotExist:
-      message = {
-        "message":"Data not found"
-      }
-      raise Response(message,status=status.HTTP_404_NOT_FOUND)
-    
-    #self.user is logged user not jwt user
-    print(self.user.id)
-    print(task.user.id)
-
-    if task.user.id == self.user.id:
-      return JsonResponse(serializer.data,status=status.HTTP_200_OK)
-    else:
+      return task
+    except toDoList.DoesNotExist as e:
       message = {
         "message":"Forbidden"
       }
-      return JsonResponse(message,status=status.HTTP_403_FORBIDDEN)
+      raise JsonResponse(message,status=status.HTTP_404_NOT_FOUND)
+    
+    #self.user is logged user not jwt user
+    # print(self.user.id)
+    # print(task.user.id)
+
+    # if task.user.id == self.user.id:
+    #   return JsonResponse(serializer.data,status=status.HTTP_200_OK)
+    # else:
+    #   message = {
+    #     "message":"Forbidden"
+    #   }
+    #   return JsonResponse(message,status=status.HTTP_403_FORBIDDEN)
 
 
 class UsersViewSet(viewsets.ModelViewSet):
