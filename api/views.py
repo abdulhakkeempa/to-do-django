@@ -27,6 +27,7 @@ class ToDoViewSet(views.APIView):
   permission_classes = [IsAuthenticated]
   lookup_field = 'id'
 
+
   def get(self, request,pk=None, *args, **kwargs):
     """
     API End Point to fetch the tasks or a specific task created by the requested user.
@@ -49,6 +50,7 @@ class ToDoViewSet(views.APIView):
     data = ToDoModelSerializer(queryset,many=True)
     return Response(data.data)
 
+
   def post(self, request, *args, **kwargs):
     """
     API End Point to create a task for a requested user.
@@ -58,9 +60,52 @@ class ToDoViewSet(views.APIView):
     task = serializer.save()
     return Response(serializer.data,status=status.HTTP_201_CREATED)
 
+
+  def put(self, request, pk, *args, **kwargs):
+    """
+    API End Point to update a task created by the requested user.
+    """
+    task = self.get_object(pk)
+
+    #validates if the task belongs to the requested user.
+    if request.user.id != task.user.id:
+      message = {
+        "message":"Forbidden"
+      }
+      return Response(message,status=status.HTTP_403_FORBIDDEN)
+
+    #updating the task.
+    serializer = ToDoModelSerializer(task, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+  def delete(self, request, pk,*args, **kwargs):
+      """
+      API End Point to delete a task created by the requested user.
+      """
+      task = self.get_object(pk)
+
+      #validates if the task belongs to the requested user.
+      if request.user.id != task.user.id:
+        message = {
+          "message":"Forbidden"
+        }
+        return Response(message,status=status.HTTP_403_FORBIDDEN)
+
+      #deleting the requested task.
+      task.delete()
+      message = {
+        "message":"Task deleted successfully"
+      }
+      return Response(message,status=status.HTTP_204_NO_CONTENT)
+
+
   def get_object(self, pk):
     """
-    API Endpoint for fetching an single object with the primary key passed.
+    Function for fetching an single object with the primary key passed.
     """
     try:
       task = toDoList.objects.get(id=pk)
@@ -68,9 +113,8 @@ class ToDoViewSet(views.APIView):
     except toDoList.DoesNotExist:
       raise Http404
 
+
     
-
-
 class UsersViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserModelSerializer
