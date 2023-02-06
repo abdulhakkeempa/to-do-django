@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.permissions import AllowAny
 from django.db.models import Count
 from django.http import JsonResponse
+from django.http import Http404
 
 from .serializer import ToDoModelSerializer,UserModelSerializer
 from project.models import toDoList
@@ -28,12 +29,21 @@ class ToDoViewSet(views.APIView):
 
   def get(self, request,pk=None, *args, **kwargs):
     """
-    API End Point to fetch the tasks created by the requested user.
+    API End Point to fetch the tasks or a specific task created by the requested user.
     """
     if pk:
       task = self.get_object(pk)
-      serializer = ToDoModelSerializer(task)
-      return JsonResponse(serializer.data,status=status.HTTP_200_OK)
+
+      #returns data only if the task is created by the requested user.
+      if request.user.id == task.user.id:
+        serializer = ToDoModelSerializer(task)
+        return Response(serializer.data)
+
+      #forbidden message for unauthorised user.
+      message = {
+        "message":"Forbidden"
+      }
+      return Response(message,status=status.HTTP_403_FORBIDDEN)
 
     queryset = toDoList.objects.filter(user=self.request.user)
     data = ToDoModelSerializer(queryset,many=True)
@@ -55,23 +65,10 @@ class ToDoViewSet(views.APIView):
     try:
       task = toDoList.objects.get(id=pk)
       return task
-    except toDoList.DoesNotExist as e:
-      message = {
-        "message":"Forbidden"
-      }
-      raise JsonResponse(message,status=status.HTTP_404_NOT_FOUND)
-    
-    #self.user is logged user not jwt user
-    # print(self.user.id)
-    # print(task.user.id)
+    except toDoList.DoesNotExist:
+      raise Http404
 
-    # if task.user.id == self.user.id:
-    #   return JsonResponse(serializer.data,status=status.HTTP_200_OK)
-    # else:
-    #   message = {
-    #     "message":"Forbidden"
-    #   }
-    #   return JsonResponse(message,status=status.HTTP_403_FORBIDDEN)
+    
 
 
 class UsersViewSet(viewsets.ModelViewSet):
